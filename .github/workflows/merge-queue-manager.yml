@@ -1,19 +1,64 @@
 name: Merge Queue Manager
-on:
-  schedule:
-    - cron: '*/5 * * * *'
-  push:
-    branches: [main]
 
+on:
+  # Run immediately after a PR is added to or removed from the queue
+  workflow_run:
+    workflows: ["Merge Queue Entry", "Merge Queue Remove"]
+    types: [completed]
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+# Ensure only one queue processor runs at a time
 concurrency:
   group: merge-queue-processor
   cancel-in-progress: false
 
 jobs:
   process-queue:
+    name: Process Merge Queue
     runs-on: ubuntu-latest
+
     steps:
-      - uses: joshbutterworthbw/merge-queue/src/actions/process-queue@v1
+      - name: Process next PR in queue
+        id: process
+        uses: joshbutterworthbw/merge-queue/src/actions/process-queue@v1
         with:
+          # Authentication
           github-token: ${{ secrets.MERGE_QUEUE_TOKEN }}
-          ignore-checks: 'add-to-queue'
+
+          # Repository info (auto-detected)
+          repository: ${{ github.repository }}
+
+          # Merge queue repository location
+          merge-queue-owner: joshbutterworthbw
+          merge-queue-repo: merge-queue
+
+          # Queue configuration (must match add-to-queue)
+          queue-label: ready
+          failed-label: merge-queue-failed
+          conflict-label: merge-queue-conflict
+          processing-label: merge-processing
+          updating-label: merge-updating
+          queued-label: queued-for-merge
+
+          # Validation requirements (must match add-to-queue)
+          required-approvals: 1
+          require-all-checks: true
+          allow-draft: false
+          block-labels: do-not-merge,wip
+
+          # Branch update configuration
+          auto-update-branch: true
+          update-timeout-minutes: 30
+
+          # Merge configuration
+          merge-method: squash
+          delete-branch-after-merge: true
+
+      # If we processed a PR, re-trigger to drain the queue
+      - name: Process next in queue
+        if: steps.process.outputs.processed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.MERGE_QUEUE_TOKEN }}
+        run: gh workflow run "${{ github.workflow }}" --repo "${{ github.repository }}"
