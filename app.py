@@ -22,3 +22,7 @@ def modulo(a: int, b: int) -> int:
     if b == 0:
         raise ValueError("Cannot modulo by zero")
     return a % b
+
+
+def absolute_value(a: int) -> int:
+    return abs(a)

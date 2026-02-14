@@ -1,5 +1,5 @@
 from app import add, subtract, multiply, divide, absolute_value
-from app import add, subtract, multiply, divide, modulo
+from app import add, subtract, multiply, divide, modulo, absolute_value
 import pytest
 
 
@@ -48,3 +48,9 @@ def test_modulo():
 def test_modulo_by_zero():
     with pytest.raises(ValueError, match="Cannot modulo by zero"):
         modulo(1, 0)
+
+
+def test_absolute_value():
+    assert absolute_value(-5) == 5
+    assert absolute_value(3) == 3
+    assert absolute_value(0) == 0
