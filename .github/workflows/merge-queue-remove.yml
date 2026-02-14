@@ -32,7 +32,7 @@ jobs:
           pr-number: ${{ github.event.pull_request.number }}
 
           # Merge queue repository location
-          merge-queue-owner: your-org
+          merge-queue-owner: joshbutterworthbw
           merge-queue-repo: merge-queue
 
           # Labels to remove
