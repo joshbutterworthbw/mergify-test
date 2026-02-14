@@ -1,18 +1,18 @@
 queue_rules:
   - name: default
     merge_conditions:
-      - check-failure = 
+      - "#check-failure = 0" 
     autoqueue: true
     queue_conditions:
       - and:
           - label != do-not-merge
           - label = ready
-          - check-failure = 
+          - "#check-failure = 0" 
 pull_request_rules:
   - name: Automatically queue PRs when approved and CI passes
     conditions:
       - "#approved-reviews-by>=1"
-      - check-failure = 
+      - "#check-failure = 0" 
       - label = ready
       - label!=do-not-merge
     actions:
