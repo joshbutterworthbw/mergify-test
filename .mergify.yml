@@ -1,8 +1,13 @@
 queue_rules:
-  - name: default
+  - name: main-queue
+    autoqueue: true
+    queue_conditions:
+      - and:
+          - label = ready
+    branch_protection_injection_mode: merge
     merge_conditions:
-      - check-success=tests
-
+      - and:
+          - check-success = continuous-integration/travis-ci
 pull_request_rules:
   - name: Automatically queue PRs when approved and CI passes
     conditions:
@@ -12,7 +17,6 @@ pull_request_rules:
     actions:
       queue:
         name: default
-
   - name: Delete branch after merge
     conditions:
       - merged
