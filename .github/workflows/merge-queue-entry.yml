@@ -11,3 +11,4 @@ jobs:
       - uses: joshbutterworthbw/merge-queue/src/actions/add-to-queue@v1
         with:
           github-token: ${{ secrets.MERGE_QUEUE_TOKEN }}
+          ignore-checks: 'add-to-queue'
