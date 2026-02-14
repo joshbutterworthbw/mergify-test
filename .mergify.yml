@@ -1,18 +1,22 @@
+merge_queue:
+  max_parallel_checks: 1
 queue_rules:
   - name: default
-    merge_conditions:
-      - check-failure = {}
-    autoqueue: true
     queue_conditions:
-      - and:
-          - label != do-not-merge
-          - label = ready
-          - check-failure = {}
+      - "#check-failure = 0"
+      - label != do-not-merge
+      - label = ready
+    merge_conditions:
+      - "#check-failure = 0"
+      - label != do-not-merge
+      - label = ready
+    autoqueue: true
+    batch_size: 1
 pull_request_rules:
   - name: Automatically queue PRs when approved and CI passes
     conditions:
       - "#approved-reviews-by>=1"
-      - check-failure = {}
+      - "#check-failure = 0" 
       - label = ready
       - label!=do-not-merge
     actions:
@@ -23,3 +27,9 @@ pull_request_rules:
       - merged
     actions:
       delete_head_branch: {}
+priority_rules:
+  - name: urgent
+    conditions:
+      - label = urgent
+    priority: high
+    allow_checks_interruption: false
