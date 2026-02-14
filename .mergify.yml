@@ -5,6 +5,7 @@ queue_rules:
     autoqueue: true
     queue_conditions:
       - and:
+          - label != do-not-merge
           - label = ready
           - check-success = tests
 pull_request_rules:
