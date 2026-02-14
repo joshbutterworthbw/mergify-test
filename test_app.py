@@ -1,4 +1,4 @@
-from app import add, subtract, multiply, divide
+from app import add, subtract, multiply, divide, absolute_value
 import pytest
 
 
@@ -32,3 +32,9 @@ def test_divide():
 def test_divide_by_zero():
     with pytest.raises(ValueError, match="Cannot divide by zero"):
         divide(1, 0)
+
+
+def test_absolute_value():
+    assert absolute_value(-5) == 5
+    assert absolute_value(3) == 3
+    assert absolute_value(0) == 0
