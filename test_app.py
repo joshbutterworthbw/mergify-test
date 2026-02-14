@@ -1,4 +1,4 @@
-from app import add, subtract, multiply, divide
+from app import add, subtract, multiply, divide, modulo
 import pytest
 
 
@@ -32,3 +32,14 @@ def test_divide():
 def test_divide_by_zero():
     with pytest.raises(ValueError, match="Cannot divide by zero"):
         divide(1, 0)
+
+
+def test_modulo():
+    assert modulo(10, 3) == 1
+    assert modulo(7, 2) == 1
+    assert modulo(9, 3) == 0
+
+
+def test_modulo_by_zero():
+    with pytest.raises(ValueError, match="Cannot modulo by zero"):
+        modulo(1, 0)
