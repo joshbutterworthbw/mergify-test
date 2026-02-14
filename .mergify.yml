@@ -27,3 +27,9 @@ pull_request_rules:
       - merged
     actions:
       delete_head_branch: {}
+priority_rules:
+  - name: urgent
+    conditions:
+      - label = urgent
+    priority: high
+    allow_checks_interruption: false
