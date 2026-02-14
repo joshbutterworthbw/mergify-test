@@ -1,14 +1,57 @@
 name: Merge Queue Entry
+
 on:
   pull_request:
     types: [labeled]
 
+# Prevent concurrent queue state modifications
+concurrency:
+  group: merge-queue-state-${{ github.repository }}
+  cancel-in-progress: false
+
 jobs:
   add-to-queue:
+    name: Add PR to Merge Queue
+    # Only run when "ready" label is added
     if: github.event.label.name == 'ready'
     runs-on: ubuntu-latest
+
     steps:
-      - uses: joshbutterworthbw/merge-queue/src/actions/add-to-queue@v1
+      - name: Add to merge queue
+        uses: joshbutterworthbw/merge-queue/src/actions/add-to-queue@v1
         with:
+          # Authentication
           github-token: ${{ secrets.MERGE_QUEUE_TOKEN }}
-          ignore-checks: 'add-to-queue'
+
+          # Repository info (auto-detected)
+          repository: ${{ github.repository }}
+          pr-number: ${{ github.event.pull_request.number }}
+
+          # Merge queue repository location
+          merge-queue-owner: joshbutterworthbw
+          merge-queue-repo: merge-queue
+
+          # Queue configuration
+          queue-label: ready
+          failed-label: merge-queue-failed
+          conflict-label: merge-queue-conflict
+          processing-label: merge-processing
+          updating-label: merge-updating
+          queued-label: queued-for-merge
+
+          # Validation requirements
+          required-approvals: 1
+          require-all-checks: true
+          allow-draft: false
+          block-labels: do-not-merge,wip
+
+          # Branch update configuration
+          auto-update-branch: true
+          update-timeout-minutes: 30
+
+          # Merge configuration
+          merge-method: squash
+          delete-branch-after-merge: true
+
+          # Priority (optional, default 0)
+          priority: 0
