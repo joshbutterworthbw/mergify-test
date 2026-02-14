@@ -1,0 +1,13 @@
+name: Merge Queue Entry
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  add-to-queue:
+    if: github.event.label.name == 'ready'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: joshbutterworthbw/merge-queue/src/actions/add-to-queue@v1
+        with:
+          github-token: ${{ secrets.MERGE_QUEUE_TOKEN }}

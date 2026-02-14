@@ -1,0 +1,15 @@
+name: Merge Queue Remove
+on:
+  pull_request:
+    types: [unlabeled, closed]
+
+jobs:
+  remove-from-queue:
+    if: |
+      (github.event.action == 'unlabeled' && github.event.label.name == 'ready') ||
+      github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: joshbutterworthbw/merge-queue/src/actions/remove-from-queue@v1
+        with:
+          github-token: ${{ secrets.MERGE_QUEUE_TOKEN }}
