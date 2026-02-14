@@ -2,17 +2,16 @@ merge_queue:
   max_parallel_checks: 1
 queue_rules:
   - name: default
+    queue_conditions:
+      - "#check-failure = 0"
+      - label != do-not-merge
+      - label = ready
     merge_conditions:
-      - "#check-failure = 0" 
+      - "#check-failure = 0"
       - label != do-not-merge
       - label = ready
     autoqueue: true
     batch_size: 1
-    queue_conditions:
-      - and:
-          - label != do-not-merge
-          - label = ready
-          - "#check-failure = 0" 
 pull_request_rules:
   - name: Automatically queue PRs when approved and CI passes
     conditions:
