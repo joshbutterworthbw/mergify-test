@@ -22,10 +22,6 @@ jobs:
           repository: ${{ github.repository }}
           pr-number: ${{ github.event.pull_request.number }}
 
-          # Merge queue repository location
-          merge-queue-owner: joshbutterworthbw
-          merge-queue-repo: merge-queue
-
           # Queue configuration
           queue-label: ready
           failed-label: merge-queue-failed
@@ -35,7 +31,6 @@ jobs:
           queued-label: queued-for-merge
 
           # Validation requirements
-          required-approvals: 1
           require-all-checks: true
           allow-draft: false
           block-labels: do-not-merge,wip
@@ -48,6 +43,3 @@ jobs:
           # Merge configuration
           merge-method: squash
           delete-branch-after-merge: true
-
-          # Priority (optional, default 0)
-          priority: 0
