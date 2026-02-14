@@ -2,6 +2,8 @@ queue_rules:
   - name: default
     merge_conditions:
       - "#check-failure = 0" 
+      - label != do-not-merge
+      - label = ready
     autoqueue: true
     queue_conditions:
       - and:
