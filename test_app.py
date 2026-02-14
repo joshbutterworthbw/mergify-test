@@ -1,4 +1,4 @@
-from app import add, subtract, multiply, divide
+from app import add, subtract, multiply, divide, square_root
 import pytest
 
 
@@ -32,3 +32,14 @@ def test_divide():
 def test_divide_by_zero():
     with pytest.raises(ValueError, match="Cannot divide by zero"):
         divide(1, 0)
+
+
+def test_square_root():
+    assert square_root(4) == 2.0
+    assert square_root(9) == 3.0
+    assert square_root(16) == 5.0  # BUG: should be 4.0
+
+
+def test_square_root_negative():
+    with pytest.raises(ValueError, match="Cannot take square root of negative number"):
+        square_root(-1)
