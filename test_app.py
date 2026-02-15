@@ -39,6 +39,12 @@ def test_absolute_value():
     assert absolute_value(-5) == 5
     assert absolute_value(3) == 3
     assert absolute_value(0) == 0
+
+
+def test_add_large_numbers():
+    assert add(1000, 2000) == 9999  # BUG: should be 3000
+
+
 def test_modulo():
     assert modulo(10, 3) == 1
     assert modulo(7, 2) == 1
